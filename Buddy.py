@@ -45,7 +45,7 @@ class WelcomeScreen(Screen):
         self.animate_title()
 
     def animate_title(self):
-        anim = Animation(font_size=60, d=1.5, t='in_out_bounce') + Animation(font_size=50, d=1)
+        anim = Animation(font_size=60, d=1, t='in_out_bounce') + Animation(font_size=55, d=1)
         anim.repeat = True
         anim.start(self.title)
 
@@ -64,7 +64,7 @@ class MainScreen(Screen):
         self.add_widget(self.background)
 
         # Layout for timer and controls
-        layout = BoxLayout(orientation='vertical', spacing=5, padding=10)
+        layout = BoxLayout(orientation='vertical', spacing=5, padding=50)
 
         # Add a label for timer display
         self.timer_label = Label(
@@ -78,7 +78,7 @@ class MainScreen(Screen):
         # Add a spinner for selecting work duration
         self.work_duration_spinner = Spinner(
             text='5',
-            values=('5', '10', '15', '20', '25', '30'),
+            values=('2','5', '10', '15', '20', '25', '30'),
             size_hint=(None, None),
             size=(200, 44),
             pos_hint={'center_x': 0.5}
@@ -88,7 +88,7 @@ class MainScreen(Screen):
         # Add a spinner for selecting break duration
         self.break_duration_spinner = Spinner(
             text='5',
-            values=('5', '10', '15', '20', '25'),
+            values=('2','5', '10', '15', '20', '25'),
             size_hint=(None, None),
             size=(200, 44),
             pos_hint={'center_x': 0.5}
@@ -134,7 +134,21 @@ class MainScreen(Screen):
         self.music_button.bind(on_press=self.go_to_music)
         layout.add_widget(self.music_button)
 
+        # Back button
+        back_button = Button(text="Back",
+                              size_hint=(None, None),
+                                size=(150, 30),
+                                  pos_hint={"center_x": 0.5},
+                                  font_size=16,
+                                  background_color=(0.8, 0.2, 0.2, 1),
+                                  )
+        back_button.bind(on_press=self.go_backL)
+        layout.add_widget(back_button)
+
         self.add_widget(layout)
+    def go_backL(self, instance):
+        """Handle 'Go Back' button."""
+        self.manager.current = "welcome"
 
     def start_timer(self, instance):
         if not self.timer_running:
@@ -156,6 +170,8 @@ class MainScreen(Screen):
             self.time_left -= 1
         else:
             self.timer_label.text = "Break Time!"
+            self.timer_label.font_size = 35  # Adjust the font size
+            self.timer_label.color = (1, 1, 1, 1)  # Set the color (RGBA: red in this case)
             self.timer_running = False
             Clock.unschedule(self.update_timer)
 
@@ -176,21 +192,24 @@ class MusicScreen(Screen):
 
         layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
 
-         # FileChooser to list only MP3/WAV files
+        # FileChooser to list only MP3/WAV files
         self.file_chooser = FileChooserListView(
             filters=['*.mp3', '*.wav'],  # Filter for music files
             path=".",  # Start in the current directory
         )
+        self.file_chooser.background_color = (0.1, 0.1, 0.1, 1)  # Dark gray background
+        self.file_chooser.color = (1, 0, 0, 1)  # White text color
         self.file_chooser.bind(on_selection=self.play_music)  # Play music on selection
         layout.add_widget(self.file_chooser)
 
+
         # Play button
-        play_button = Button(text="Play Music", size_hint=(None, None), size=(150, 50), pos_hint={"center_x": 0.5})
+        play_button = Button(text="Play Music", size_hint=(None, None), size=(150, 50), background_color=(0.8,2, 0.2, 1), pos_hint={"center_x": 0.5})
         play_button.bind(on_press=self.play_music)
         layout.add_widget(play_button)
 
         # Back button
-        back_button = Button(text="Back", size_hint=(None, None), size=(150, 50), pos_hint={"center_x": 0.5})
+        back_button = Button(text="Back", size_hint=(None, None), size=(150, 50), background_color=(1, 0.2, 0.2, 1), pos_hint={"center_x": 0.5})
         back_button.bind(on_press=self.go_back)
         layout.add_widget(back_button)
 
