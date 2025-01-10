@@ -65,7 +65,7 @@ class MainScreen(Screen):
         self.add_widget(self.background)
 
         # Layout for timer and controls
-        layout = BoxLayout(orientation='vertical', spacing=5, padding=50)
+        layout = BoxLayout(orientation='vertical', spacing=5, padding=30)
 
         # Add a label for timer display
         self.timer_label = Label(
