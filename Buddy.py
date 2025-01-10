@@ -7,7 +7,7 @@ from kivy.core.window import Window
 from kivy.animation import Animation
 
 # Set the default window size
-Window.size = (400, 600)
+Window.size = (240, 320)
 
 # Define the Welcome Screen
 class WelcomeScreen(Screen):
@@ -53,13 +53,18 @@ class MainScreen(Screen):
 
         # Add a label to indicate this is the main screen
         label = Label(
-            text="Welcome to the Main Screen!",
+            text="Welcome to the Main Screen!\nTap anywhere to go back.",
             font_size=24,
-            color=(0.3, 0.3, 0.3, 1)
+            color=(0.3, 0.3, 0.3, 1),
+            halign='center',
         )
         layout.add_widget(label)
 
         self.add_widget(layout)
+
+    def on_touch_down(self, touch):
+        """Handle tap anywhere on the screen."""
+        self.manager.current = "welcome"
 
 
 # ScreenManager to manage screens
