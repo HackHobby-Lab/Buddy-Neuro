@@ -81,7 +81,7 @@ class MainScreen(Screen):
             text='5',
             values=('2','5', '10', '15', '20', '25', '30'),
             size_hint=(None, None),
-            size=(200, 44),
+            size=(170, 38),
             pos_hint={'center_x': 0.5}
         )
         layout.add_widget(self.work_duration_spinner)
@@ -91,7 +91,7 @@ class MainScreen(Screen):
             text='5',
             values=('2','5', '10', '15', '20', '25'),
             size_hint=(None, None),
-            size=(200, 44),
+            size=(170, 38),
             pos_hint={'center_x': 0.5}
         )
         layout.add_widget(self.break_duration_spinner)
