@@ -176,8 +176,12 @@ class MusicScreen(Screen):
 
         layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
 
-        # FileChooser for selecting music
-        self.file_chooser = FileChooserListView(filters=['*.mp3', '*.wav'])
+         # FileChooser to list only MP3/WAV files
+        self.file_chooser = FileChooserListView(
+            filters=['*.mp3', '*.wav'],  # Filter for music files
+            path=".",  # Start in the current directory
+        )
+        self.file_chooser.bind(on_selection=self.play_music)  # Play music on selection
         layout.add_widget(self.file_chooser)
 
         # Play button
