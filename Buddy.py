@@ -59,7 +59,7 @@ class MainScreen(Screen):
         self.add_widget(self.background)
 
         # Layout for timer and controls
-        layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
+        layout = BoxLayout(orientation='vertical', spacing=5, padding=10)
 
 
         # Add a label for timer display
@@ -95,11 +95,11 @@ class MainScreen(Screen):
         self.start_button = Button(
             text="Start Timer",
             size_hint=(None, None),
-            size=(200, 50),
+            size=(150, 30),
             pos_hint={"center_x": 0.5},
             background_normal='',  # Remove default background
             background_color=(0.2, 0.6, 0.2, 1),  # Green color
-            font_size=18
+            font_size=16
         )
         self.start_button.bind(on_press=self.start_timer)
         layout.add_widget(self.start_button)
@@ -108,11 +108,11 @@ class MainScreen(Screen):
         self.reset_button = Button(
             text="Reset Timer",
             size_hint=(None, None),
-            size=(200, 50),
+            size=(150, 30),
             pos_hint={"center_x": 0.5},
             background_normal='',  # Remove default background
             background_color=(0.8, 0.2, 0.2, 1),  # Red color
-            font_size=18
+            font_size=16
         )
         self.reset_button.bind(on_press=self.reset_timer)
         layout.add_widget(self.reset_button)
@@ -121,11 +121,11 @@ class MainScreen(Screen):
         self.go_back_button = Button(
             text="Go Back",
             size_hint=(None, None),
-            size=(200, 50),
+            size=(150, 30),
             pos_hint={"center_x": 0.5},
             background_normal='',  # Remove default background
             background_color=(0.6, 0.2, 0.6, 1),  # Purple color
-            font_size=18
+            font_size=16
         )
         self.go_back_button.bind(on_press=self.go_back)
         layout.add_widget(self.go_back_button)
