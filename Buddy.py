@@ -8,10 +8,15 @@ from kivy.uix.spinner import Spinner
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.animation import Animation
-from kivy.uix.widget import Widget
+from kivy.uix.filechooser import FileChooserListView
+from kivy.core.audio import SoundLoader
 
 # Set the default window size
 Window.size = (240, 320)
+
+# Global variable for background music
+current_music = None
+
 
 # Define the Welcome Screen
 class WelcomeScreen(Screen):
@@ -28,8 +33,8 @@ class WelcomeScreen(Screen):
         # Add a title label with animation
         self.title = Label(
             text="BUDDY",
-            font_size=50,  # Use numeric value
-            color=(1, 1, 1, 1),  # White text
+            font_size=50,
+            color=(1, 1, 1, 1),
             bold=True,
             pos_hint={"center_x": 0.5, "center_y": 0.7}
         )
@@ -55,18 +60,17 @@ class MainScreen(Screen):
         super().__init__(**kwargs)
         self.timer_running = False
         self.time_left = 0
-        self.background = Image(source='download (1).jpg', allow_stretch=True, keep_ratio=False)
+        self.background = Image(source='down.jpg', allow_stretch=True, keep_ratio=False)
         self.add_widget(self.background)
 
         # Layout for timer and controls
         layout = BoxLayout(orientation='vertical', spacing=5, padding=10)
 
-
         # Add a label for timer display
         self.timer_label = Label(
             text="00:00", 
             font_size=50, 
-            color=(1, 1, 255, 1),
+            color=(1, 1, 1, 1),
             halign='center'
         )
         layout.add_widget(self.timer_label)
@@ -97,8 +101,8 @@ class MainScreen(Screen):
             size_hint=(None, None),
             size=(150, 30),
             pos_hint={"center_x": 0.5},
-            background_normal='',  # Remove default background
-            background_color=(0.2, 0.6, 0.2, 1),  # Green color
+            background_normal='',
+            background_color=(0.2, 0.6, 0.2, 1),
             font_size=16
         )
         self.start_button.bind(on_press=self.start_timer)
@@ -110,25 +114,25 @@ class MainScreen(Screen):
             size_hint=(None, None),
             size=(150, 30),
             pos_hint={"center_x": 0.5},
-            background_normal='',  # Remove default background
-            background_color=(0.8, 0.2, 0.2, 1),  # Red color
+            background_normal='',
+            background_color=(0.8, 0.2, 0.2, 1),
             font_size=16
         )
         self.reset_button.bind(on_press=self.reset_timer)
         layout.add_widget(self.reset_button)
 
-        # Go Back Button
-        self.go_back_button = Button(
-            text="Go Back",
+        # Select Music Button
+        self.music_button = Button(
+            text="Select Music",
             size_hint=(None, None),
             size=(150, 30),
             pos_hint={"center_x": 0.5},
-            background_normal='',  # Remove default background
-            background_color=(0.6, 0.2, 0.6, 1),  # Purple color
+            background_normal='',
+            background_color=(0.6, 0.2, 0.6, 1),
             font_size=16
         )
-        self.go_back_button.bind(on_press=self.go_back)
-        layout.add_widget(self.go_back_button)
+        self.music_button.bind(on_press=self.go_to_music)
+        layout.add_widget(self.music_button)
 
         self.add_widget(layout)
 
@@ -147,38 +151,60 @@ class MainScreen(Screen):
 
     def update_timer(self, dt):
         if self.time_left > 0:
-            # Decrement the timer and update the label
             minutes, seconds = divmod(self.time_left, 60)
             self.timer_label.text = f"{minutes:02}:{seconds:02}"
             self.time_left -= 1
         else:
-            # Timer ends, notify user and switch to break time
             self.timer_label.text = "Break Time!"
             self.timer_running = False
             Clock.unschedule(self.update_timer)
 
-            # Switch to break timer after work session ends
-            Clock.schedule_once(self.start_break_timer, 3)
-
-    def start_break_timer(self, dt):
-        # Get the break duration from the spinner
-        break_duration = int(self.break_duration_spinner.text)
-        self.time_left = break_duration * 60
-        self.timer_running = True
-
-        # Start countdown for break timer
-        Clock.schedule_interval(self.update_timer, 1)
-
     def reset_timer(self, instance):
-        # Reset everything
         self.timer_running = False
         self.time_left = 0
         self.timer_label.text = "00:00"
         Clock.unschedule(self.update_timer)
 
+    def go_to_music(self, instance):
+        self.manager.current = "music"
+
+
+# Define the Music Selection Screen
+class MusicScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
+
+        # FileChooser for selecting music
+        self.file_chooser = FileChooserListView(filters=['*.mp3', '*.wav'])
+        layout.add_widget(self.file_chooser)
+
+        # Play button
+        play_button = Button(text="Play Music", size_hint=(None, None), size=(150, 50), pos_hint={"center_x": 0.5})
+        play_button.bind(on_press=self.play_music)
+        layout.add_widget(play_button)
+
+        # Back button
+        back_button = Button(text="Back", size_hint=(None, None), size=(150, 50), pos_hint={"center_x": 0.5})
+        back_button.bind(on_press=self.go_back)
+        layout.add_widget(back_button)
+
+        self.add_widget(layout)
+
+    def play_music(self, instance):
+        global current_music
+        if current_music:
+            current_music.stop()
+        selected_file = self.file_chooser.selection
+        if selected_file:
+            current_music = SoundLoader.load(selected_file[0])
+            if current_music:
+                current_music.loop = True
+                current_music.play()
+
     def go_back(self, instance):
-        """Handle 'Go Back' button."""
-        self.manager.current = "welcome"
+        self.manager.current = "main"
 
 
 # ScreenManager to manage screens
@@ -187,6 +213,7 @@ class BuddyApp(App):
         sm = ScreenManager()
         sm.add_widget(WelcomeScreen(name="welcome"))
         sm.add_widget(MainScreen(name="main"))
+        sm.add_widget(MusicScreen(name="music"))
         return sm
 
 
