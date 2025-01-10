@@ -73,7 +73,7 @@ class MainScreen(Screen):
 
         # Add a spinner for selecting work duration
         self.work_duration_spinner = Spinner(
-            text='Work Duration (mins)',
+            text='5',
             values=('5', '10', '15', '20', '25', '30'),
             size_hint=(None, None),
             size=(200, 44),
@@ -83,7 +83,7 @@ class MainScreen(Screen):
 
         # Add a spinner for selecting break duration
         self.break_duration_spinner = Spinner(
-            text='Break Duration (mins)',
+            text='5',
             values=('5', '10', '15', '20', '25'),
             size_hint=(None, None),
             size=(200, 44),
