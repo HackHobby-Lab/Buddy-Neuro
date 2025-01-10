@@ -53,7 +53,7 @@ class MainScreen(Screen):
 
         # Add a label to indicate this is the main screen
         label = Label(
-            text="Welcome to the Main Screen!\nTap anywhere to go back.",
+            text="Welcome!\nTap to go back.",
             font_size=24,
             color=(0.3, 0.3, 0.3, 1),
             halign='center',
