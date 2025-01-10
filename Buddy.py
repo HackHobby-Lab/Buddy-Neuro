@@ -60,6 +60,7 @@ class MainScreen(Screen):
         super().__init__(**kwargs)
         self.timer_running = False
         self.time_left = 0
+        self.break_music = SoundLoader.load("break_music.mp3")  # Replace with the actual file path
         self.background = Image(source='down.jpg', allow_stretch=True, keep_ratio=False)
         self.add_widget(self.background)
 
@@ -170,19 +171,35 @@ class MainScreen(Screen):
             self.time_left -= 1
         else:
             self.timer_label.text = "Break Time!"
-            self.timer_label.font_size = 35  # Adjust the font size
-            self.timer_label.color = (1, 1, 1, 1)  # Set the color (RGBA: red in this case)
+            self.timer_label.font_size = 35
+            self.timer_label.color = (1, 1, 1, 1)
             self.timer_running = False
             Clock.unschedule(self.update_timer)
+            self.play_break_music()
 
     def reset_timer(self, instance):
         self.timer_running = False
         self.time_left = 0
         self.timer_label.text = "00:00"
         Clock.unschedule(self.update_timer)
+        self.stop_music()
 
     def go_to_music(self, instance):
         self.manager.current = "music"
+
+    def play_break_music(self):
+        global current_music
+        if current_music:
+            current_music.stop()
+        if self.break_music:
+            current_music = self.break_music
+            current_music.loop = False  # Only play once
+            current_music.play()
+
+    def stop_music(self):
+        global current_music
+        if current_music:
+            current_music.stop()
 
 
 # Define the Music Selection Screen
