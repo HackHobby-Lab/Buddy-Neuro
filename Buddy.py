@@ -19,7 +19,7 @@ class WelcomeScreen(Screen):
         super().__init__(**kwargs)
 
         # Add a background image
-        self.background = Image(source='download (2).jpg', allow_stretch=True, keep_ratio=False)
+        self.background = Image(source='download.jpg', allow_stretch=True, keep_ratio=False)
         self.add_widget(self.background)
 
         # Layout for content
@@ -55,7 +55,7 @@ class MainScreen(Screen):
         super().__init__(**kwargs)
         self.timer_running = False
         self.time_left = 0
-        self.background = Image(source='download (2).jpg', allow_stretch=True, keep_ratio=False)
+        self.background = Image(source='download (1).jpg', allow_stretch=True, keep_ratio=False)
         self.add_widget(self.background)
 
         # Layout for timer and controls
